@@ -12,7 +12,7 @@ async function getMusics(artistName) {
     });
 
     if (!tokenResponse.ok) {
-        throw new Error('Failed to get access token');
+        throw new Error('failed to get access token');
     }
 
     const tokenData = await tokenResponse.json();
@@ -25,12 +25,12 @@ async function getMusics(artistName) {
     });
 
     if (!searchResponse.ok) {
-        throw new Error('Failed to search artist');
+        throw new Error('failed to search artist');
     }
 
     const searchData = await searchResponse.json();
     if (!searchData.artists.items[0]) {
-        throw new Error('Artist not found');
+        throw new Error('artist not found');
     }
     const artistId = searchData.artists.items[0].id;
 
@@ -41,7 +41,7 @@ async function getMusics(artistName) {
     });
 
     if (!allTracksResponse.ok) {
-        throw new Error('Failed to get top tracks');
+        throw new Error('failed to get top tracks');
     }
 
     const allTracksData = await allTracksResponse.json();
@@ -52,7 +52,7 @@ async function getMusics(artistName) {
 
     return selectedTracks.map(track => ({
         name: track.name,
-        albumCover: track.album.images && track.album.images[0] ? track.album.images[0].url : 'Imagem não disponível', 
+        albumCover: track.album.images && track.album.images[0] ? track.album.images[0].url : 'imagem não disponível', 
     }));
 }
 
@@ -65,7 +65,7 @@ function shuffleArray(array) {
 }
 
 let timeWriting;
-const interval = 800;
+const interval = 100;
 
 document.getElementById('artist-name').addEventListener('input', function (event) {
     clearTimeout(timeWriting);

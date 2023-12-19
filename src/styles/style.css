@@ -26,6 +26,7 @@ body {
     justify-content: center;
     align-items: center;
     margin-bottom: 2%;
+    /* border-radius: 100px; */
 }
 
 .title{
@@ -65,6 +66,18 @@ body {
     box-shadow: 0 0 6px rgba(0,0,0,.3), 0 -6px 6px
     rgba(0,0,0,.3);
     border-radius: 4px;
+}
+
+#container-title{
+    display: flex; 
+    flex-direction: row; 
+    background-color: black; 
+    justify-content: center; 
+    align-content: center; 
+    width: 300px;
+    margin: 5px;
+    padding: 5px;
+    /* border-radius: 10px; */
 }
 
 
