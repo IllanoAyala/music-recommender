@@ -1,6 +1,6 @@
 async function getRecommendedTracks(artistName) {
-    const clientId = '919cfbaf33894baa863a4da0d8abfc4d';
-    const clientSecret = 'c37e2b9278544440bd3a5cb9bef52837';
+    const clientId = 'e92fa6d32df84cafb0702c1601a598ec';
+    const clientSecret = '3b32fb193e924ba780e28d617e7a59e3';
 
     const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -32,10 +32,10 @@ async function getRecommendedTracks(artistName) {
     if (!searchData.artists.items[0]) {
         throw new Error('artist not found');
     }
-    
+
     const artistId = searchData.artists.items[0].id;
 
-    const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=5`, {
+    const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=7`, {
         headers: {
             'Authorization': 'Bearer ' + accessToken,
         },
@@ -51,11 +51,16 @@ async function getRecommendedTracks(artistName) {
     return recommendedTracks.map(track => ({
         name: track.name,
         albumCover: track.album.images && track.album.images[0] ? track.album.images[0].url : 'imagem não disponível',
+        uri: track.uri
     }));
 }
 
+function getSpotifyPlayUrl(uri) {
+    return `https://open.spotify.com/track/${uri}`;
+}
+
 let timeWriting;
-const interval = 800;
+const interval = 700;
 
 document.getElementById('artist-name').addEventListener('input', function (event) {
     clearTimeout(timeWriting);
@@ -73,16 +78,19 @@ document.getElementById('artist-name').addEventListener('input', function (event
         else if(artistName === 'Frank Ocean') //Ela gosta de frank ocean
         {
             const containerTracks = document.getElementById("container-tracks");
-            containerTracks.textContent = 'I love u';
+            containerTracks.textContent = 'Fiz isso aqui para você. Gosto de você.  (Tudo bem se não achar tão legal)';
+            containerTracks.classList.add('iluvu');
         }
 
         else{
+
             try {
 
                 const recommendedTracks = await getRecommendedTracks(artistName);
-    
                 const containerTracks = document.getElementById("container-tracks");
+                
                 containerTracks.textContent = '';
+                containerTracks.classList.remove('iluvu')
     
                 recommendedTracks.forEach((track, index) => {
                     const listItem = document.createElement('div');
@@ -91,6 +99,13 @@ document.getElementById('artist-name').addEventListener('input', function (event
                         <img src="${track.albumCover}" alt="${track.name} - Album Cover" style="width: 35px; height: 35px; margin-right: 5px">
                     `;
                     listItem.classList.add('music-track');
+
+                    listItem.addEventListener('click', () => {
+                        const playUrl = getSpotifyPlayUrl((track.uri).replace("spotify:track:", ""));
+                
+                        window.open(playUrl, '_blank');
+                    });
+
                     containerTracks.appendChild(listItem);
                 });
             } catch (error) {
@@ -123,6 +138,13 @@ document.getElementById('reload-btn').addEventListener('click', async function (
                 <img src="${track.albumCover}" alt="${track.name} - Album Cover" style="width: 30px; height: 30px; margin-right: 5px">
             `;
             listItem.classList.add('music-track');
+
+            listItem.addEventListener('click', () => {
+                const playUrl = getSpotifyPlayUrl((track.uri).replace("spotify:track:", ""));
+        
+                window.open(playUrl, '_blank');
+            });
+
             containerTracks.appendChild(listItem);
         });
     } catch (error) {

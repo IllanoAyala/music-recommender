@@ -5,28 +5,33 @@ body {
     height: 100vh;
     justify-content: center;
     align-items: center;
-    background-color: black; 
+    background-color: #0D0D0D; 
 }
 
 #container {
     display: flex;
     width: 60%; 
     height: 80vh;
-    background-color: rgb(255, 255, 255);
+    background-color: white;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    border-radius: 20px;
+    
 }
 
 #container-artist {
     display: flex;
-    background-color: rgb(0, 0, 0);
-    height: 500px;
-    width: 80%;
+    background-color: #0D0D0D;
+    height: 300px;
+    width: 60%;
     justify-content: center;
     align-items: center;
     margin-bottom: 2%;
     /* border-radius: 100px; */
+    box-shadow: 0 0 6px rgba(0,0,0,.3), 0 -6px 6px
+    rgba(0,0,0,.3);
+    border-radius: 20px;
 }
 
 .title{
@@ -34,7 +39,8 @@ body {
     font-weight: bold;
     
     /* background-color:  #000000;  */
-    color: #fff; 
+    /* color: #fff;  */
+    color: #0D0D0D;
     border: none;
 }
 
@@ -48,9 +54,23 @@ body {
 
 #container-tracks{
     /* background-color: #000000; */
-    width: 80%;
+    width: 60%;
     height: 700px;
     margin-bottom: 2%;
+}
+
+.iluvu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    
+    /* background-color:  #000000;  */
+    /* color: #fff;  */
+    color: #0D0D0D;
+    border: none;
+
 }
 
 .music-track{
@@ -62,16 +82,22 @@ body {
     flex-direction: row-reverse;
     margin: 5px;
     padding-left: 10px;
-    background-color: #000000;
+    background-color: #0D0D0D;
     box-shadow: 0 0 6px rgba(0,0,0,.3), 0 -6px 6px
     rgba(0,0,0,.3);
     border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.music-track:hover{
+    transform: scale(1.1);
 }
 
 #container-title{
     display: flex; 
     flex-direction: row; 
-    background-color: black; 
+    /* background-color: #0D0D0D;  */
     justify-content: center; 
     justify-self: center;
     width: 80%;
