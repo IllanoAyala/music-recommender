@@ -32,6 +32,7 @@ async function getRecommendedTracks(artistName) {
     if (!searchData.artists.items[0]) {
         throw new Error('artist not found');
     }
+    
     const artistId = searchData.artists.items[0].id;
 
     const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=5`, {
