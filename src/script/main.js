@@ -1,6 +1,6 @@
-async function getMusics(artistName) {
-    const clientId = '919cfbaf33894baa863a4da0d8abfc4d'; 
-    const clientSecret = 'c37e2b9278544440bd3a5cb9bef52837'; 
+async function getRecommendedTracks(artistName) {
+    const clientId = '919cfbaf33894baa863a4da0d8abfc4d';
+    const clientSecret = 'c37e2b9278544440bd3a5cb9bef52837';
 
     const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -34,38 +34,27 @@ async function getMusics(artistName) {
     }
     const artistId = searchData.artists.items[0].id;
 
-    const allTracksResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=US`, {
+    const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=5`, {
         headers: {
             'Authorization': 'Bearer ' + accessToken,
         },
     });
 
-    if (!allTracksResponse.ok) {
-        throw new Error('failed to get top tracks');
+    if (!recommendationsResponse.ok) {
+        throw new Error('failed to get recommended tracks');
     }
 
-    const allTracksData = await allTracksResponse.json();
-    const allTracks = allTracksData.tracks;
+    const recommendationsData = await recommendationsResponse.json();
+    const recommendedTracks = recommendationsData.tracks;
 
-    const shuffledTracks = shuffleArray(allTracks);
-    const selectedTracks = shuffledTracks.slice(0, 5);
-
-    return selectedTracks.map(track => ({
+    return recommendedTracks.map(track => ({
         name: track.name,
-        albumCover: track.album.images && track.album.images[0] ? track.album.images[0].url : 'imagem não disponível', 
+        albumCover: track.album.images && track.album.images[0] ? track.album.images[0].url : 'imagem não disponível',
     }));
 }
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
 let timeWriting;
-const interval = 100;
+const interval = 800;
 
 document.getElementById('artist-name').addEventListener('input', function (event) {
     clearTimeout(timeWriting);
@@ -89,7 +78,7 @@ document.getElementById('artist-name').addEventListener('input', function (event
         else{
             try {
 
-                const recommendedTracks = await getMusics(artistName);
+                const recommendedTracks = await getRecommendedTracks(artistName);
     
                 const containerTracks = document.getElementById("container-tracks");
                 containerTracks.textContent = '';
@@ -117,7 +106,7 @@ document.getElementById('reload-btn').addEventListener('click', async function (
     var artistName = document.getElementById('artist-name').value;
 
     try {
-        let recommendedTracks = await getMusics(artistName);
+        let recommendedTracks = await getRecommendedTracks(artistName);
 
         recommendedTracks = recommendedTracks.filter(track => !selectedTracksSet.has(track.name));
 

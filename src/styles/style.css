@@ -73,10 +73,10 @@ body {
     flex-direction: row; 
     background-color: black; 
     justify-content: center; 
-    align-content: center; 
-    width: 250px;
-    margin: 5px;
-    padding: 5px;
+    justify-self: center;
+    width: 80%;
+    margin-bottom: 5px;
+    margin-top: 5px;
     /* border-radius: 10px; */
 }
 
