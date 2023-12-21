@@ -1,6 +1,6 @@
 async function getRecommendedTracks(artistName) {
-    const clientId = 'e92fa6d32df84cafb0702c1601a598ec';
-    const clientSecret = '3b32fb193e924ba780e28d617e7a59e3';
+    const clientId = 'e1a59126035044f9a966bbfb65d83d5b';
+    const clientSecret = 'ebf4f3aa64814e3b9e7c95efb1189edf';
 
     const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -55,9 +55,7 @@ async function getRecommendedTracks(artistName) {
     }));
 }
 
-function getSpotifyPlayUrl(uri) {
-    return `https://open.spotify.com/track/${uri}`;
-}
+
 
 let timeWriting;
 const interval = 500;
@@ -94,7 +92,7 @@ document.getElementById('artist-name').addEventListener('input', function (event
     
                 recommendedTracks.forEach((track, index) => {
                     const iframe = document.createElement('iframe');
-                    iframe.src = `https://open.spotify.com/embed/track/${(track.uri).replace("spotify:track:", "")}?utm_source=generator`;
+                    iframe.src = `https://open.spotify.com/embed/track/${(track.uri).replace("spotify:track:", "")}?utm_source=generator`; 
                     iframe.width = '100%';
                     iframe.height = '90';
                     iframe.frameBorder = '0';
@@ -159,10 +157,3 @@ document.getElementById('reload-btn').addEventListener('click', async function (
     }
 });
 
-// function changeInput(){
-//     timeAnimation = setTimeout(function(){
-        
-
-//     }, 2000)
-
-// }
