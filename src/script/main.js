@@ -1,4 +1,4 @@
-let justArtist = true;
+let justArtist = false;
 
 async function getRecommendedTracks(artistName) {
     const clientId = 'e1a59126035044f9a966bbfb65d83d5b';
@@ -60,7 +60,7 @@ async function getRecommendedTracks(artistName) {
     }
 
     else{
-        const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=30`, {
+        const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=60`, {
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
             },
@@ -176,8 +176,7 @@ document.getElementById('reload-btn').addEventListener('click', async function (
         const iframes = document.querySelectorAll("iframe");
 
         for (let index = 0; index < iframes.length; index++) {
-            containerTracks.removeChild(iframes[index]);
-            
+            containerTracks.removeChild(iframes[index]);           
         }
 
         recommendedTracks.forEach((track, index) => {
@@ -202,4 +201,15 @@ document.getElementById('reload-btn').addEventListener('click', async function (
         console.error('Error:', error);
     }
 });
+
+document.getElementById("change-mode").addEventListener("click", function(){
+    justArtist = !justArtist
+    
+    // if(justArtist){
+    //     document.getElementById("artist-name").classList.add("change")
+    // }
+    // else{
+    //     document.getElementById("artist-name").classList.remove("change")
+    // }
+})
 

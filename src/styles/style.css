@@ -5,25 +5,42 @@ body {
     height: 100vh;
     justify-content: center;
     align-items: center;
-    background-color: #0D0D0D; 
+    background: linear-gradient(to bottom right, #121212, #1E2923, #121212);
+    flex-direction: column;
 }
 
 #container {
     display: flex;
-    width: 50%; 
+    width: 80vh;
     height: 80vh;
     background-color: white;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    border-radius: 20px;   
+    /* border-radius: 10px; */
+    transition: transform 0.3s ease-in-out; /* Adiciona uma transição suave ao contêiner */
+    box-shadow: 0 0 6px rgba(0,0,0,.3), 0 -6px 6px
+    rgba(0,0,0,.3);
+
+    /* Adiciona uma transformação sutil no hover para um efeito de elevação */
+    &:hover {
+        transform: translateX(-15px);
+    }
+}
+
+#disc{
+    position: absolute; 
+    transform: translateX(50%);  
+    width: 78vh; 
+    height: 78vh; 
+    z-index: -1;
 }
 
 #container-artist {
     display: flex;
-    background-color: #0D0D0D;
-    height: 300px;
-    width: 60%;
+    background-color: #121212;
+    height: 200px;
+    width: 80%;
     justify-content: center;
     align-items: center;
     margin-bottom: 2%;
@@ -34,12 +51,12 @@ body {
 }
 
 .title{
-    font-size: 40px;
+    font-size: 35px;
     font-weight: bold;
     
     /* background-color:  #000000;  */
     /* color: #fff;  */
-    color: #0D0D0D;
+    color: #121212;
     border: none;
 }
 
@@ -49,8 +66,9 @@ body {
     text-align: center;
     height: 40px;
     width: 300px;
-    transition: .8s all ease-in-out;
 }
+
+
 
 .change-input{
     position: absolute;
@@ -68,7 +86,7 @@ body {
 
 #container-tracks{
     /* background-color: #000000; */
-    width: 60%;
+    width: 80%;
     height: 900px;
     margin-bottom: 2%;
 }
@@ -135,10 +153,10 @@ body {
 #container-title{
     display: flex; 
     flex-direction: row; 
-    /* background-color: #0D0D0D;  */
+    background-color: 'white'; 
     justify-content: center; 
     justify-self: center;
-    width: 80%;
+    width: 40%;
     margin-bottom: 5px;
     margin-top: 5px;
     /* border-radius: 10px; */
@@ -151,3 +169,5 @@ body {
         transform: scale(1.05);
     }
 }
+
+
