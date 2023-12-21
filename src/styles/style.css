@@ -10,14 +10,13 @@ body {
 
 #container {
     display: flex;
-    width: 60%; 
+    width: 50%; 
     height: 80vh;
     background-color: white;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    border-radius: 20px;
-    
+    border-radius: 20px;   
 }
 
 #container-artist {
@@ -50,12 +49,34 @@ body {
     text-align: center;
     height: 40px;
     width: 300px;
+    transition: .8s all ease-in-out;
+}
+
+.change-input{
+    position: absolute;
+    left: 100%;
+}
+
+.iframe {
+    opacity: 0; 
+    transition: opacity 2.5s ease-in-out;
+}
+
+.iframe.loaded {
+    opacity: 1;
+    transition: transform 0.3s ease-in-out;
+
+
+    &:hover{
+        transform: scale(1.05);
+
+    } 
 }
 
 #container-tracks{
     /* background-color: #000000; */
     width: 60%;
-    height: 700px;
+    height: 900px;
     margin-bottom: 2%;
 }
 
@@ -73,7 +94,7 @@ body {
 
 }
 
-.music-track{
+/* .music-track{
     color: #fff;
     font-weight: 550;
     display: flex;
@@ -88,11 +109,13 @@ body {
     border-radius: 4px;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
-}
 
-.music-track:hover{
-    transform: scale(1.1);
-}
+
+    &:hover{
+        transform: scale(1.1);
+
+    }
+} */
 
 #container-title{
     display: flex; 
@@ -106,4 +129,10 @@ body {
     /* border-radius: 10px; */
 }
 
+#reload-btn{
+    transition: transform 0.1 ease-in-out;
 
+    &:hover{
+        transform: scale(1.05);
+    }
+}

@@ -35,7 +35,7 @@ async function getRecommendedTracks(artistName) {
 
     const artistId = searchData.artists.items[0].id;
 
-    const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=7`, {
+    const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=5`, {
         headers: {
             'Authorization': 'Bearer ' + accessToken,
         },
@@ -60,7 +60,7 @@ function getSpotifyPlayUrl(uri) {
 }
 
 let timeWriting;
-const interval = 700;
+const interval = 500;
 
 document.getElementById('artist-name').addEventListener('input', function (event) {
     clearTimeout(timeWriting);
@@ -78,7 +78,7 @@ document.getElementById('artist-name').addEventListener('input', function (event
         else if(artistName === 'Frank Ocean') //Ela gosta de frank ocean
         {
             const containerTracks = document.getElementById("container-tracks");
-            containerTracks.textContent = 'Fiz isso aqui para você. Gosto de você.  (Tudo bem se não achar tão legal)';
+            containerTracks.textContent = 'Fiz isso aqui para você. Gosto de você. (Tudo bem se não achar tão legal)';
             containerTracks.classList.add('iluvu');
         }
 
@@ -93,20 +93,22 @@ document.getElementById('artist-name').addEventListener('input', function (event
                 containerTracks.classList.remove('iluvu')
     
                 recommendedTracks.forEach((track, index) => {
-                    const listItem = document.createElement('div');
-                    listItem.innerHTML = `
-                        <p>${track.name}</p>
-                        <img src="${track.albumCover}" alt="${track.name} - Album Cover" style="width: 35px; height: 35px; margin-right: 5px">
-                    `;
-                    listItem.classList.add('music-track');
+                    const iframe = document.createElement('iframe');
+                    iframe.src = `https://open.spotify.com/embed/track/${(track.uri).replace("spotify:track:", "")}?utm_source=generator`;
+                    iframe.width = '100%';
+                    iframe.height = '90';
+                    iframe.frameBorder = '0';
+                    iframe.allowfullscreen = true;
+                    iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+                    iframe.loading = 'lazy';
+                    iframe.style.borderRadius = '12px';
+                    iframe.className = 'iframe';
 
-                    listItem.addEventListener('click', () => {
-                        const playUrl = getSpotifyPlayUrl((track.uri).replace("spotify:track:", ""));
-                
-                        window.open(playUrl, '_blank');
+                    iframe.addEventListener('load', () => {
+                        iframe.classList.add('loaded'); 
                     });
-
-                    containerTracks.appendChild(listItem);
+                
+                    containerTracks.appendChild(iframe);
                 });
             } catch (error) {
                 console.error('Error:', error);
@@ -126,28 +128,41 @@ document.getElementById('reload-btn').addEventListener('click', async function (
 
         recommendedTracks = recommendedTracks.filter(track => !selectedTracksSet.has(track.name));
 
-        recommendedTracks.forEach(track => selectedTracksSet.add(track.name));
-
         const containerTracks = document.getElementById("container-tracks");
-        containerTracks.textContent = '';
+        const iframes = document.querySelectorAll("iframe");
+
+        for (let index = 0; index < iframes.length; index++) {
+            containerTracks.removeChild(iframes[index]);
+            
+        }
 
         recommendedTracks.forEach((track, index) => {
-            const listItem = document.createElement('div');
-            listItem.innerHTML = `
-                <p>${track.name}</p>
-                <img src="${track.albumCover}" alt="${track.name} - Album Cover" style="width: 30px; height: 30px; margin-right: 5px">
-            `;
-            listItem.classList.add('music-track');
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://open.spotify.com/embed/track/${(track.uri).replace("spotify:track:", "")}?utm_source=generator`;
+            iframe.width = '100%';
+            iframe.height = '90';
+            iframe.frameBorder = '0';
+            iframe.allowfullscreen = true;
+            iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+            iframe.loading = 'lazy';
+            iframe.style.borderRadius = '12px';
+            iframe.className = 'iframe';
 
-            listItem.addEventListener('click', () => {
-                const playUrl = getSpotifyPlayUrl((track.uri).replace("spotify:track:", ""));
-        
-                window.open(playUrl, '_blank');
+            iframe.addEventListener('load', () => {
+                iframe.classList.add('loaded'); 
             });
-
-            containerTracks.appendChild(listItem);
+        
+            containerTracks.appendChild(iframe);
         });
     } catch (error) {
         console.error('Error:', error);
     }
 });
+
+// function changeInput(){
+//     timeAnimation = setTimeout(function(){
+        
+
+//     }, 2000)
+
+// }
