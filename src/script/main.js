@@ -1,3 +1,5 @@
+let justArtist = true;
+
 async function getRecommendedTracks(artistName) {
     const clientId = 'e1a59126035044f9a966bbfb65d83d5b';
     const clientSecret = 'ebf4f3aa64814e3b9e7c95efb1189edf';
@@ -35,24 +37,68 @@ async function getRecommendedTracks(artistName) {
 
     const artistId = searchData.artists.items[0].id;
 
-    const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=5`, {
-        headers: {
-            'Authorization': 'Bearer ' + accessToken,
-        },
-    });
 
-    if (!recommendationsResponse.ok) {
-        throw new Error('failed to get recommended tracks');
+    if(!justArtist){
+        const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=5`, {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            },
+        });
+
+        if (!recommendationsResponse.ok) {
+            throw new Error('failed to get recommended tracks');
+        }
+    
+        const recommendationsData = await recommendationsResponse.json();
+        const recommendedTracks = recommendationsData.tracks;
+    
+        return recommendedTracks.map(track => ({
+            name: track.name,
+            albumCover: track.album.images && track.album.images[0] ? track.album.images[0].url : 'imagem não disponível',
+            uri: track.uri
+        }));
     }
 
-    const recommendationsData = await recommendationsResponse.json();
-    const recommendedTracks = recommendationsData.tracks;
+    else{
+        const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=30`, {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            },
+        });
 
-    return recommendedTracks.map(track => ({
-        name: track.name,
-        albumCover: track.album.images && track.album.images[0] ? track.album.images[0].url : 'imagem não disponível',
-        uri: track.uri
-    }));
+        if (!recommendationsResponse.ok) {
+            throw new Error('failed to get recommended tracks');
+        }
+    
+        const recommendationsData = await recommendationsResponse.json();
+        const recommendedTracks = recommendationsData.tracks;
+        
+        const artistResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            },
+        });
+
+        if (!artistResponse.ok) {
+            throw new Error('failed to get artist details');
+        }
+
+        const artistData = await artistResponse.json();
+        const originalArtistName = artistData.name;
+
+        const allRecommendedTracks = recommendedTracks;
+
+        const sameArtistTracks = allRecommendedTracks.filter(track => {
+            const trackArtists = track.artists.map(artist => artist.name);
+            return trackArtists.includes(originalArtistName);
+        });
+
+        return (sameArtistTracks.slice(0, 5)).map(track => ({
+            name: track.name,
+            albumCover: track.album.images && track.album.images[0] ? track.album.images[0].url : 'imagem não disponível',
+            uri: track.uri
+        }));
+    }
 }
 
 
