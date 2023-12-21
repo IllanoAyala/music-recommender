@@ -73,6 +73,28 @@ body {
     margin-bottom: 2%;
 }
 
+.pass-btn {
+    background-color: #ffffff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+
+.pass-btn img {
+    width: 20px; 
+    height: 20px; 
+}
+
+/* Efeito hover para o botão */
+.pass-btn:hover {
+    transform: scale(1.05);
+}
+
 .iluvu{
     display: flex;
     justify-content: center;
