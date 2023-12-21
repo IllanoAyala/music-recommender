@@ -1,8 +1,8 @@
 let justArtist = false;
 
 async function getRecommendedTracks(artistName) {
-    const clientId = 'e1a59126035044f9a966bbfb65d83d5b';
-    const clientSecret = 'ebf4f3aa64814e3b9e7c95efb1189edf';
+    const clientId = 'e92fa6d32df84cafb0702c1601a598ec';
+    const clientSecret = '3b32fb193e924ba780e28d617e7a59e3';
 
     const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',

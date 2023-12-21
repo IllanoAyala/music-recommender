@@ -22,7 +22,6 @@ body {
     box-shadow: 0 0 6px rgba(0,0,0,.3), 0 -6px 6px
     rgba(0,0,0,.3);
 
-    /* Adiciona uma transformação sutil no hover para um efeito de elevação */
     &:hover {
         transform: translateX(-15px);
     }
@@ -154,9 +153,9 @@ body {
     display: flex; 
     flex-direction: row; 
     background-color: 'white'; 
-    justify-content: center; 
+    justify-content: start; 
     justify-self: center;
-    width: 40%;
+    width: 80%;
     margin-bottom: 5px;
     margin-top: 5px;
     /* border-radius: 10px; */
