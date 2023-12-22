@@ -1,8 +1,8 @@
 let justArtist = false;
 
 async function getRecommendedTracks(artistName) {
-    const clientId = 'e92fa6d32df84cafb0702c1601a598ec';
-    const clientSecret = '3b32fb193e924ba780e28d617e7a59e3';
+    const clientId = 'bb02b55f6e504856ba194dc9ce441e84';
+    const clientSecret = '87dc4e4e6a6142328892ac52e3c53fc1';
 
     const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -60,7 +60,7 @@ async function getRecommendedTracks(artistName) {
     }
 
     else{
-        const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=60`, {
+        const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=10`, {
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
             },
@@ -100,8 +100,6 @@ async function getRecommendedTracks(artistName) {
         }));
     }
 }
-
-
 
 let timeWriting;
 const interval = 500;
@@ -172,6 +170,24 @@ document.getElementById('reload-btn').addEventListener('click', async function (
 
         recommendedTracks = recommendedTracks.filter(track => !selectedTracksSet.has(track.name));
 
+        if(justArtist){
+            console.log(recommendedTracks.length)
+            while (recommendedTracks.length < 5) {
+                let additionalTracks = await getRecommendedTracks(artistName);
+
+                recommendedTracks.push(...additionalTracks.filter(track => !selectedTracksSet.has(track.name)));
+            }
+
+            console.log(recommendedTracks.length)
+
+            if(recommendedTracks.length > 5){              
+                recommendedTracks.splice(5, recommendedTracks.length - 5)
+            }
+
+            console.log(recommendedTracks.length)
+
+        }
+
         const containerTracks = document.getElementById("container-tracks");
         const iframes = document.querySelectorAll("iframe");
 
@@ -204,6 +220,9 @@ document.getElementById('reload-btn').addEventListener('click', async function (
 
 document.getElementById("change-mode").addEventListener("click", function(){
     justArtist = !justArtist
+    console.log(`${justArtist}`)
+    // document.getElementById('reload-btn').click()
+
     
     // if(justArtist){
     //     document.getElementById("artist-name").classList.add("change")
