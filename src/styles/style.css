@@ -23,8 +23,19 @@ body {
     rgba(0,0,0,.3);
 
     &:hover {
-        transform: translateX(-15px);
+        transform: translateX(-25px);
     }
+}
+
+#credits{
+    align-self: center; 
+    margin-left: auto; 
+    font-family: 'Arial', sans-serif;
+    font-size: 15px;
+    /* color: #444444; */
+    margin-top: 20px;
+    padding: 10px;
+    border-left: 1px solid #444444;
 }
 
 #disc{
