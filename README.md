@@ -4,5 +4,6 @@ Este é um projeto simples de recomendação de músicas que utiliza a API do Sp
 
 ## `o css não esta concluído.`
 
-
+## Page 
+![image](https://github.com/IllanoAyala/Music/assets/92798837/8e6d31a3-7d4a-4960-adda-577b2121afb3)
 
