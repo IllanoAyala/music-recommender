@@ -1,4 +1,4 @@
-let justArtist = false;
+let justArtist = true;
 
 async function getRecommendedTracks(artistName) {
     const clientId = 'bb02b55f6e504856ba194dc9ce441e84';
@@ -39,7 +39,7 @@ async function getRecommendedTracks(artistName) {
 
 
     if(!justArtist){
-        const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=5`, {
+        const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${artistId}&limit=6`, {
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
             },
@@ -93,7 +93,7 @@ async function getRecommendedTracks(artistName) {
             return trackArtists.includes(originalArtistName);
         });
 
-        return (sameArtistTracks.slice(0, 5)).map(track => ({
+        return (sameArtistTracks.slice(0, 6)).map(track => ({
             name: track.name,
             albumCover: track.album.images && track.album.images[0] ? track.album.images[0].url : 'imagem não disponível',
             uri: track.uri
@@ -172,7 +172,7 @@ document.getElementById('reload-btn').addEventListener('click', async function (
 
         if(justArtist){
             console.log(recommendedTracks.length)
-            while (recommendedTracks.length < 5) {
+            while (recommendedTracks.length < 6) {
                 let additionalTracks = await getRecommendedTracks(artistName);
 
                 recommendedTracks.push(...additionalTracks.filter(track => !selectedTracksSet.has(track.name)));
@@ -180,8 +180,8 @@ document.getElementById('reload-btn').addEventListener('click', async function (
 
             console.log(recommendedTracks.length)
 
-            if(recommendedTracks.length > 5){              
-                recommendedTracks.splice(5, recommendedTracks.length - 5)
+            if(recommendedTracks.length > 6){              
+                recommendedTracks.splice(6, recommendedTracks.length - 6)
             }
 
             console.log(recommendedTracks.length)
