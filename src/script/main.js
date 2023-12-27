@@ -1,8 +1,8 @@
 let justArtist = true;
 
-async function getRecommendedTracks(artistName) {
-    const clientId = 'bb02b55f6e504856ba194dc9ce441e84';
-    const clientSecret = '87dc4e4e6a6142328892ac52e3c53fc1';
+async function getRecommendedTracks(artistName, reload) {
+    const clientId = '2f5473de3e754d19b45076f7a280bf7b';
+    const clientSecret = 'a75b581755ad4dd3b8f75db0acc0a557';
 
     const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -20,7 +20,7 @@ async function getRecommendedTracks(artistName) {
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
 
-    const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=1`, {
+    const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=4`, {
         headers: {
             'Authorization': 'Bearer ' + accessToken,
         },
@@ -33,6 +33,32 @@ async function getRecommendedTracks(artistName) {
     const searchData = await searchResponse.json();
     if (!searchData.artists.items[0]) {
         throw new Error('artist not found');
+    }
+
+    if(!reload){
+        const allArtists = searchData.artists.items.map(artist => artist.name)
+
+        // function autocomplete(){
+            const artistName = (document.getElementById('artist-name').value).toLowerCase();
+            const autocompleteList = document.getElementById('autocomplete-list');
+
+            autocompleteList.innerHTML = '';
+
+            const suggestions = allArtists.filter(artist => artist.toLowerCase().includes(artistName));
+            // console.log(suggestions)
+
+            suggestions.forEach(suggestion => {
+                const suggestionDiv = document.createElement('div');
+                suggestionDiv.innerHTML = suggestion;
+                suggestionDiv.addEventListener('click', () => {
+                document.getElementById('artist-name').value = suggestion;
+                autocompleteList.innerHTML = '';
+                document.getElementById('reload-btn').click()
+                });
+                autocompleteList.appendChild(suggestionDiv);
+            });
+
+        // }
     }
 
     const artistId = searchData.artists.items[0].id;
@@ -108,19 +134,26 @@ document.getElementById('artist-name').addEventListener('input', function (event
     clearTimeout(timeWriting);
 
     timeWriting = setTimeout(async function () {
-        var artistName = event.target.value;
+        let artistName = event.target.value;
 
         if(artistName === '')
         {
             const containerTracks = document.getElementById("container-tracks");
+            const autocompleteList = document.getElementById('autocomplete-list');
+
             containerTracks.textContent = '';
+            autocompleteList.innerHTML = '';
+
             selectedTracksSet.clear();
 
         }
-        else if(artistName === 'Frank Ocean') //Ela gosta de frank ocean
+        else if(artistName === 'Deftones') //Ela gosta *apagar depois*
         {
             const containerTracks = document.getElementById("container-tracks");
-            containerTracks.textContent = 'Fiz isso aqui para você. Gosto de você. (Tudo bem se não achar tão legal)';
+            const autocompleteList = document.getElementById('autocomplete-list');
+
+            autocompleteList.innerHTML = '';
+            containerTracks.textContent = 'i luv, anita!';
             containerTracks.classList.add('iluvu');
         }
 
@@ -128,7 +161,7 @@ document.getElementById('artist-name').addEventListener('input', function (event
 
             try {
 
-                const recommendedTracks = await getRecommendedTracks(artistName);
+                const recommendedTracks = await getRecommendedTracks(artistName, false);
                 const containerTracks = document.getElementById("container-tracks");
                 
                 containerTracks.textContent = '';
@@ -138,7 +171,7 @@ document.getElementById('artist-name').addEventListener('input', function (event
                     const iframe = document.createElement('iframe');
                     iframe.src = `https://open.spotify.com/embed/track/${(track.uri).replace("spotify:track:", "")}?utm_source=generator`; 
                     iframe.width = '100%';
-                    iframe.height = '90';
+                    iframe.height = '90vh';
                     iframe.frameBorder = '0';
                     iframe.allowfullscreen = true;
                     iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
@@ -163,25 +196,25 @@ document.getElementById('artist-name').addEventListener('input', function (event
 let selectedTracksSet = new Set();
 
 document.getElementById('reload-btn').addEventListener('click', async function () {
-    var artistName = document.getElementById('artist-name').value;
+    let artistName = document.getElementById('artist-name').value;
 
     try {
-        let recommendedTracks = await getRecommendedTracks(artistName);
+        let recommendedTracks = await getRecommendedTracks(artistName, true);
 
         recommendedTracks = recommendedTracks.filter(track => !selectedTracksSet.has(track.name));
 
         if(justArtist){
             console.log(recommendedTracks.length)
-            while (recommendedTracks.length < 6) {
-                let additionalTracks = await getRecommendedTracks(artistName);
+            while (recommendedTracks.length < 5) {
+                let additionalTracks = await getRecommendedTracks(artistName, true);
 
                 recommendedTracks.push(...additionalTracks.filter(track => !selectedTracksSet.has(track.name)));
             }
 
             console.log(recommendedTracks.length)
 
-            if(recommendedTracks.length > 6){              
-                recommendedTracks.splice(6, recommendedTracks.length - 6)
+            if(recommendedTracks.length > 5){              
+                recommendedTracks.splice(5, recommendedTracks.length - 5)
             }
 
             console.log(recommendedTracks.length)
@@ -199,7 +232,7 @@ document.getElementById('reload-btn').addEventListener('click', async function (
             const iframe = document.createElement('iframe');
             iframe.src = `https://open.spotify.com/embed/track/${(track.uri).replace("spotify:track:", "")}?utm_source=generator`;
             iframe.width = '100%';
-            iframe.height = '90';
+            iframe.height = '90vh';
             iframe.frameBorder = '0';
             iframe.allowfullscreen = true;
             iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
@@ -231,4 +264,12 @@ document.getElementById("change-mode").addEventListener("click", function(){
     //     document.getElementById("artist-name").classList.remove("change")
     // }
 })
+
+document.addEventListener('click', (event) => {
+    const autocompleteContainer = document.getElementById('container-artist');
+    if (!autocompleteContainer.contains(event.target)) {
+        document.getElementById('autocomplete-list').innerHTML = '';
+    }
+});
+
 

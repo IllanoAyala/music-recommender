@@ -2,92 +2,135 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     display: flex;
-    height: 100vh;
-    /* width: 100vh; */
+    min-height: 100vh;
+    max-width: 100wh;
     justify-content: center;
     align-items: center;
     background: linear-gradient(to bottom right, #121212, #1E2923, #121212);
     flex-direction: column;
+    overflow: hidden;
 }
 
 #container {
     display: flex;
-    width: 80vh;
-    height: 80vh;
+    width: 80vw;
+    max-width: 800px;
+    min-width: 500px; /* Definindo um tamanho mínimo para o container */
+    height: 80vw;
+    max-height: 800px;
+    min-height: 500px; /* Definindo um tamanho mínimo para o container */
     background-color: white;
-    /* justify-content: center; */
     align-items: center;
     flex-direction: column;
-    /* border-radius: 10px; */
-    transition: transform 0.3s ease-in-out; /* Adiciona uma transição suave ao contêiner */
-    box-shadow: 0 0 6px rgba(0,0,0,.3), 0 -6px 6px
-    rgba(0,0,0,.3);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 0 6px rgba(0,0,0,.3), 0 -6px 6px rgba(0,0,0,.3);
 
     &:hover {
-        transform: translateX(-25px);
+        transform: translateX(-5%);
     }
 }
 
-#credits{
-    align-self: center; 
+#autocomplete-list {
+    font-size: 1vw;
+    position: absolute;
+    flex-direction: column;
+    background-color: #121212;
+    color: #ffffff;
+    max-height: 20vh;
+    overflow-y: scroll;
+    z-index: 1;
+    width: 90%;
+    justify-self: center;
+    max-width: 400px;
+    top: 100%;
+}
+
+#autocomplete-list div {  
+    padding: 8px;
+    cursor: pointer;
+}
+
+#autocomplete-list div:hover {
+    background-color: #ddd;
+}
+
+#credits {
+    align-self: center;
     margin-left: auto; 
     font-family: 'Arial', sans-serif;
-    font-size: 10px;
-    /* color: #444444; */
+    font-size: 0.7vw;
     margin-top: 20px;
     padding: 10px;
     border-left: 1px solid #444444;
 }
 
-#disc{
-    position: absolute; 
-    transform: translateX(50%);  
-    width: 78vh; 
-    height: 78vh; 
+#disc {
+    position: absolute;
+    left: 50%;
+    width: 78vw;
+    max-width: 780px;
+    height: 78vw;
+    max-height: 780px;
     z-index: -1;
+    animation: rotate360 8s linear infinite;
+}
+
+@keyframes rotate360 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#artist-input {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
 }
 
 #container-artist {
-    display: flex;
+    position: relative;
+    display: grid;
+    flex-direction: column;
     background-color: #121212;
-    height: 10vh;
+    height: 100px;
     width: 80%;
+    min-width: 640px;
+    min-width: 100px;
+    max-width: 800px;
     justify-content: center;
     align-items: center;
     margin-bottom: 2%;
-    /* border-radius: 100px; */
-    box-shadow: 0 0 6px rgba(0,0,0,.3), 0 -6px 6px
-    rgba(0,0,0,.3);
+    box-shadow: 0 0 6px rgba(0,0,0,.3), 0 -6px 6px rgba(0,0,0,.3);
     border-radius: 20px;
 }
 
-.title{
-    font-size: 3vh;
+.title {
+    font-size: 30px;
     font-weight: bold;
-    
-    /* background-color:  #000000;  */
-    /* color: #fff;  */
     color: #121212;
     border: none;
 }
 
-#artist-name{
+#artist-name {
     border-radius: 30px;
     border: none;
     text-align: center;
-    height: 4vh;
-    width: 30vh;
+    height: 40px;
+    width: 30vw;
+    max-width: 300px;
 }
 
-
-
-.change-input{
+.change-input {
     position: absolute;
     left: 100%;
 }
 
 .iframe {
-    opacity: 0; 
+    opacity: 0;
     transition: opacity 2.5s ease-in-out;
 }
 
@@ -95,10 +138,9 @@ body {
     opacity: 1;
 }
 
-#container-tracks{
-    /* background-color: #000000; */
+#container-tracks {
     width: 80%;
-    /* height: 90vh; */
+    max-width: 800px;
     margin-bottom: 2%;
 }
 
@@ -113,72 +155,108 @@ body {
     margin-right: 5px;
 }
 
-
 .pass-btn img {
-    width: 2vh; 
-    height: 2vh; 
+    width: 20px;
+    height: 20px;
 }
 
-/* Efeito hover para o botão */
 .pass-btn:hover {
     transform: scale(1.05);
 }
 
-.iluvu{
+.iluvu {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 1.5vw;
     font-weight: bold;
-    
-    /* background-color:  #000000;  */
-    /* color: #fff;  */
     color: #0D0D0D;
     border: none;
-
 }
 
-/* .music-track{
-    color: #fff;
-    font-weight: 550;
+#container-title {
     display: flex;
+    flex-direction: row;
+    background-color: 'white';
     justify-content: start;
-    align-items: center;
-    flex-direction: row-reverse;
-    margin: 5px;
-    padding-left: 10px;
-    background-color: #0D0D0D;
-    box-shadow: 0 0 6px rgba(0,0,0,.3), 0 -6px 6px
-    rgba(0,0,0,.3);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-
-
-    &:hover{
-        transform: scale(1.1);
-
-    }
-} */
-
-#container-title{
-    display: flex; 
-    flex-direction: row; 
-    background-color: 'white'; 
-    justify-content: start; 
     justify-self: center;
     width: 80%;
+    max-width: 800px;
     margin-bottom: 5px;
     margin-top: 5px;
-    /* border-radius: 10px; */
 }
 
-#reload-btn{
-    transition: transform 0.1 ease-in-out;
+#reload-btn {
+    transition: transform 0.1s ease-in-out;
 
-    &:hover{
+    &:hover {
         transform: scale(1.05);
     }
 }
 
+#img-title{
+    margin-left: -30px; 
+    margin-bottom: 2px; 
+    transform: rotate(90deg);
+}
+
+@media screen and (max-width: 1366px) and (min-width: 769px) {
+    #container{
+        width: 600px;
+        height: 600px;
+    }
+
+    #container-artist {
+        height: 55px;
+    }
+
+    .pass-btn {
+        padding: 7px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .pass-btn img {
+        width: 15px;
+        height: 15px;
+    }
+
+    #artist-name {
+        border-radius: 30px;
+        height: 30px;
+        width: 30vw;
+        font-size: 12px;
+    }
+
+    #disc {
+        width: 600px;
+        height: 600px;
+    }
+
+    .iframe.loaded {
+        height: 85px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    #img-title{ 
+        margin-bottom: 0px;
+        
+        margin-left: -30px;
+    }
+
+    #container-title {
+        width: 80%;
+        max-width: 800px;
+        height: 60px;
+    }
+
+    #reload-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+}
 
