@@ -1,7 +1,7 @@
 let justArtist = true;
 
-const clientId = '2f5473de3e754d19b45076f7a280bf7b';
-const clientSecret = 'a75b581755ad4dd3b8f75db0acc0a557';
+const clientId = 'c2207c25b17b437ab6b197a3bbd43740';
+const clientSecret = 'e6918a77e7b74580ab491812768c240c';
 async function getRecommendedTracks(artistName, reload) {
 
     const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
@@ -20,7 +20,7 @@ async function getRecommendedTracks(artistName, reload) {
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
 
-    const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=4`, {
+    const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=1`, {
         headers: {
             'Authorization': 'Bearer ' + accessToken,
         },
@@ -184,9 +184,7 @@ document.getElementById('reload-btn').addEventListener('click', async function (
         containerTracks.removeChild(iframes[index]);           
     }
 
-    //add gif
     containerTracks.appendChild(createLoadingGif());
-    document.getElementById('reload-btn').disabled = true;
 
     // containerTracks.innerHTML = 'Carregando...';
 
@@ -197,7 +195,10 @@ document.getElementById('reload-btn').addEventListener('click', async function (
 
         if(justArtist){
             console.log(recommendedTracks.length)
-            while (recommendedTracks.length < 5) {
+
+            let numberTracks = document.getElementById("container").offsetHeight === 800 ? 6 : 5;
+
+            while (recommendedTracks.length < numberTracks) {
                 let additionalTracks = await getRecommendedTracks(artistName, true);
 
                 recommendedTracks.push(...additionalTracks.filter(track => !selectedTracksSet.has(track.name)));
@@ -205,8 +206,8 @@ document.getElementById('reload-btn').addEventListener('click', async function (
 
             console.log(recommendedTracks.length)
 
-            if(recommendedTracks.length > 5){              
-                recommendedTracks.splice(5, recommendedTracks.length - 5)
+            if(recommendedTracks.length > numberTracks){              
+                recommendedTracks.splice(numberTracks, recommendedTracks.length - numberTracks)
             }
 
             console.log(recommendedTracks.length)
@@ -214,7 +215,7 @@ document.getElementById('reload-btn').addEventListener('click', async function (
         }
 
         containerTracks.removeChild(document.getElementById("loading"))
-        document.getElementById('reload-btn').disabled = false;
+        containerTracks.innerHTML = '';
 
         recommendedTracks.forEach((track, index) => {
             const iframe = document.createElement('iframe');
@@ -278,7 +279,7 @@ async function autoComplete(artistName){
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
 
-    const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=4`, {
+    const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=9`, {
         headers: {
             'Authorization': 'Bearer ' + accessToken,
         },
@@ -304,6 +305,7 @@ async function autoComplete(artistName){
 
         const suggestions = allArtists.filter(artist => artist.toLowerCase().includes(artistName1));
         // console.log(suggestions)
+        // console.log(document.getElementById("container").offsetHeight)
 
         suggestions.forEach(suggestion => {
             const suggestionDiv = document.createElement('div');

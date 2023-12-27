@@ -31,7 +31,7 @@ body {
 }
 
 #autocomplete-list {
-    font-size: 1vw;
+    font-size: 15px;
     position: absolute;
     flex-direction: column;
     background-color: #121212;
@@ -194,9 +194,9 @@ body {
     align-items: center;
 }
 
-#loading img{
+/* #loading img{
 
-}
+} */
 
 #reload-btn {
     transition: transform 0.1s ease-in-out;
@@ -214,8 +214,8 @@ body {
 
 @media screen and (max-width: 1366px) and (min-width: 769px) {
     #container{
-        width: 600px;
-        height: 600px;
+        width: 620px;
+        height: 620px;
     }
 
     #container-artist {
