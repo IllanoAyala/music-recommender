@@ -1,8 +1,8 @@
 let justArtist = true;
 
+const clientId = '2f5473de3e754d19b45076f7a280bf7b';
+const clientSecret = 'a75b581755ad4dd3b8f75db0acc0a557';
 async function getRecommendedTracks(artistName, reload) {
-    const clientId = '2f5473de3e754d19b45076f7a280bf7b';
-    const clientSecret = 'a75b581755ad4dd3b8f75db0acc0a557';
 
     const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -35,31 +35,31 @@ async function getRecommendedTracks(artistName, reload) {
         throw new Error('artist not found');
     }
 
-    if(!reload){
-        const allArtists = searchData.artists.items.map(artist => artist.name)
+    // if(!reload){
+    //     const allArtists = searchData.artists.items.map(artist => artist.name)
 
-        // function autocomplete(){
-            const artistName = (document.getElementById('artist-name').value).toLowerCase();
-            const autocompleteList = document.getElementById('autocomplete-list');
+    //     // function autocomplete(){
+    //         const artistName = (document.getElementById('artist-name').value).toLowerCase();
+    //         const autocompleteList = document.getElementById('autocomplete-list');
 
-            autocompleteList.innerHTML = '';
+    //         autocompleteList.innerHTML = '';
 
-            const suggestions = allArtists.filter(artist => artist.toLowerCase().includes(artistName));
-            // console.log(suggestions)
+    //         const suggestions = allArtists.filter(artist => artist.toLowerCase().includes(artistName));
+    //         // console.log(suggestions)
 
-            suggestions.forEach(suggestion => {
-                const suggestionDiv = document.createElement('div');
-                suggestionDiv.innerHTML = suggestion;
-                suggestionDiv.addEventListener('click', () => {
-                document.getElementById('artist-name').value = suggestion;
-                autocompleteList.innerHTML = '';
-                document.getElementById('reload-btn').click()
-                });
-                autocompleteList.appendChild(suggestionDiv);
-            });
+    //         suggestions.forEach(suggestion => {
+    //             const suggestionDiv = document.createElement('div');
+    //             suggestionDiv.innerHTML = suggestion;
+    //             suggestionDiv.addEventListener('click', () => {
+    //             document.getElementById('artist-name').value = suggestion;
+    //             autocompleteList.innerHTML = '';
+    //             document.getElementById('reload-btn').click()
+    //             });
+    //             autocompleteList.appendChild(suggestionDiv);
+    //         });
 
-        // }
-    }
+    //     // }
+    // }
 
     const artistId = searchData.artists.items[0].id;
 
@@ -128,7 +128,7 @@ async function getRecommendedTracks(artistName, reload) {
 }
 
 let timeWriting;
-const interval = 500;
+const interval = 100;
 
 document.getElementById('artist-name').addEventListener('input', function (event) {
     clearTimeout(timeWriting);
@@ -158,45 +158,37 @@ document.getElementById('artist-name').addEventListener('input', function (event
         }
 
         else{
-
-            try {
-
-                const recommendedTracks = await getRecommendedTracks(artistName, false);
-                const containerTracks = document.getElementById("container-tracks");
-                
-                containerTracks.textContent = '';
-                containerTracks.classList.remove('iluvu')
-    
-                recommendedTracks.forEach((track, index) => {
-                    const iframe = document.createElement('iframe');
-                    iframe.src = `https://open.spotify.com/embed/track/${(track.uri).replace("spotify:track:", "")}?utm_source=generator`; 
-                    iframe.width = '100%';
-                    iframe.height = '90vh';
-                    iframe.frameBorder = '0';
-                    iframe.allowfullscreen = true;
-                    iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
-                    iframe.loading = 'lazy';
-                    iframe.style.borderRadius = '12px';
-                    iframe.className = 'iframe';
-
-                    iframe.addEventListener('load', () => {
-                        iframe.classList.add('loaded'); 
-                    });
-                
-                    containerTracks.appendChild(iframe);
-                });
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            autoComplete(artistName);
         }
     }, interval);
 });
 
+function createLoadingGif(){
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = "loading";
+    const img = document.createElement('img');
+    img.src = 'src/styles/img/icons8-carregando.gif'
+    loadingDiv.appendChild(img);
+    return loadingDiv;
+}
 
 let selectedTracksSet = new Set();
 
 document.getElementById('reload-btn').addEventListener('click', async function () {
     let artistName = document.getElementById('artist-name').value;
+    const containerTracks = document.getElementById("container-tracks");
+
+    const iframes = document.querySelectorAll("iframe");
+
+    for (let index = 0; index < iframes.length; index++) {
+        containerTracks.removeChild(iframes[index]);           
+    }
+
+    //add gif
+    containerTracks.appendChild(createLoadingGif());
+    document.getElementById('reload-btn').disabled = true;
+
+    // containerTracks.innerHTML = 'Carregando...';
 
     try {
         let recommendedTracks = await getRecommendedTracks(artistName, true);
@@ -221,12 +213,8 @@ document.getElementById('reload-btn').addEventListener('click', async function (
 
         }
 
-        const containerTracks = document.getElementById("container-tracks");
-        const iframes = document.querySelectorAll("iframe");
-
-        for (let index = 0; index < iframes.length; index++) {
-            containerTracks.removeChild(iframes[index]);           
-        }
+        containerTracks.removeChild(document.getElementById("loading"))
+        document.getElementById('reload-btn').disabled = false;
 
         recommendedTracks.forEach((track, index) => {
             const iframe = document.createElement('iframe');
@@ -273,3 +261,59 @@ document.addEventListener('click', (event) => {
 });
 
 
+async function autoComplete(artistName){
+    const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
+        },
+        body: 'grant_type=client_credentials',
+    });
+
+    if (!tokenResponse.ok) {
+        throw new Error('failed to get access token');
+    }
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=4`, {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+        },
+    });
+
+    if (!searchResponse.ok) {
+        throw new Error('failed to search artist');
+    }
+
+    const searchData = await searchResponse.json();
+    if (!searchData.artists.items[0]) {
+        throw new Error('artist not found');
+    }
+
+    // if(!reload){
+        const allArtists = searchData.artists.items.map(artist => artist.name)
+
+        
+        const artistName1 = (document.getElementById('artist-name').value).toLowerCase();
+        const autocompleteList = document.getElementById('autocomplete-list');
+
+        autocompleteList.innerHTML = '';
+
+        const suggestions = allArtists.filter(artist => artist.toLowerCase().includes(artistName1));
+        // console.log(suggestions)
+
+        suggestions.forEach(suggestion => {
+            const suggestionDiv = document.createElement('div');
+            suggestionDiv.innerHTML = suggestion;
+            suggestionDiv.addEventListener('click', () => {
+            document.getElementById('artist-name').value = suggestion;
+            autocompleteList.innerHTML = '';
+            document.getElementById('reload-btn').click()
+            });
+            autocompleteList.appendChild(suggestionDiv);
+        });
+    // }
+}
