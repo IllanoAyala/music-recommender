@@ -172,8 +172,20 @@ document.getElementById('reload-btn').addEventListener('click', async function (
             let numberTracks = document.getElementById("container").offsetHeight >= 800 ? 6 : 5;
 
             while (recommendedTracks.length < numberTracks) {
-                let additionalTracks = await getRecommendedTracks(artistName, true);
-
+                let additionalTracks;
+        
+                try {
+                    additionalTracks = await Promise.race([
+                        getRecommendedTracks(artistName, true),
+                        new Promise((_resolve, reject) => {
+                            setTimeout(() => reject(new Error('timeout, not found tracks')), 5000);
+                        }),
+                    ]);
+                } catch (error) {
+                    console.error(error.message);
+                    break; 
+                }
+        
                 recommendedTracks.push(...additionalTracks.filter(track => !selectedTracksSet.has(track.name)));
             }
 
