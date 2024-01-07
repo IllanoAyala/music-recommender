@@ -1,0 +1,26 @@
+html
+  head
+    link(rel="stylesheet", href="/src/styles/style.css")
+    title Music
+    link(rel="shortcut icon", href="/src/styles/img/headphone-symbol-svgrepo-com.svg", type="image/x-icon")
+  body
+    #container
+      #container-title
+        p.title MUSIC
+        img(src="/src/styles/img/headphone-symbol-svgrepo-com.svg", alt="simbol-music", id="img-title")
+        p#credits Developed by Illano Ayala
+      #container-artist
+        #artist-input
+          button.pass-btn
+            img(src="/src/styles/img/music-music-player-player-2-svgrepo-com.svg", alt="")
+          input(type="text", id="artist-name", placeholder="Choose an Artist...")
+          button.pass-btn#change-mode
+            img(src="/src/styles/img/music-next-next-button-svgrepo-com.svg", alt="")
+          img(src="/src/styles/img/reload.svg", alt="", style="cursor: pointer;", id="reload-btn")
+        #autocomplete-list
+      #container-tracks
+    img(src="/src/styles/img/pngwing.com.png", alt="", id="disc")
+    script.
+      const clientId = '#{clientId}';
+      const clientSecret = '#{clientSecret}';
+  script(src="/src/script/main.js")

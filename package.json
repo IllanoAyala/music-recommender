@@ -1,0 +1,21 @@
+{
+  "name": "music",
+  "version": "1.0.0",
+  "description": "This is a simple music recommendation project that uses the Spotify API to provide suggestions. For those who don't know me, I'm a huge music fan (I literally listen to music 24 hours a day), so nothing better than developing a music recommender based on artists.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
