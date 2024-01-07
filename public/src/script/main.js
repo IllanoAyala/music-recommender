@@ -1,4 +1,5 @@
 //Autor: Illano Ayala - 2024
+let justArtist = true;
 
 async function getRecommendedTracks(artistName) {
 
