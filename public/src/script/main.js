@@ -118,15 +118,15 @@ document.getElementById('artist-name').addEventListener('input', function (event
             selectedTracksSet.clear();
 
         }
-        else if(artistName === 'Deftones') //Ela gosta *apagar depois*
-        {
-            const containerTracks = document.getElementById("container-tracks");
-            const autocompleteList = document.getElementById('autocomplete-list');
+        // else if(artistName === '') //Ela gosta *apagar depois*
+        // {
+        //     const containerTracks = document.getElementById("container-tracks");
+        //     const autocompleteList = document.getElementById('autocomplete-list');
 
-            autocompleteList.innerHTML = '';
-            containerTracks.textContent = 'i luv, anita!';
-            containerTracks.classList.add('iluvu');
-        }
+        //     autocompleteList.innerHTML = '';
+        //     containerTracks.textContent = '';
+        //     containerTracks.classList.add('iluvu');
+        // }
 
         else{
             autoComplete(artistName);
