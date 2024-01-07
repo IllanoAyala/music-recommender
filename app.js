@@ -4,12 +4,12 @@ const path = require('path');
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.set('view engine', 'pug'); // Set the view engine to pug
+app.set('view engine', 'pug'); 
 
 require('dotenv').config();
 
 app.get('/', (req, res) => {
-    res.render('index', { // Render the index.pug file
+    res.render('index', { 
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
     });
@@ -17,5 +17,5 @@ app.get('/', (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`http://localhost:3000/`);
 });
