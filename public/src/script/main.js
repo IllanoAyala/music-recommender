@@ -1,8 +1,6 @@
-//Autor: Illano Ayala - 2024
 let justArtist = true;
 
 async function getRecommendedTracks(artistName) {
-
     const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
@@ -158,9 +156,20 @@ document.getElementById('reload-btn').addEventListener('click', async function (
         containerTracks.removeChild(iframes[index]);           
     }
 
+    if(containerTracks.contains(document.getElementById("loading")))
+    {
+        containerTracks.removeChild(document.getElementById("loading"))
+    }
+
     containerTracks.appendChild(createLoadingGif());
 
     try {
+        if(artistName === ''){
+            containerTracks.removeChild(document.getElementById("loading"))
+            containerTracks.innerHTML = '';
+            throw new Error('artist not found');            
+        }
+
         let recommendedTracks = await getRecommendedTracks(artistName);
 
         recommendedTracks = recommendedTracks.filter(track => !selectedTracksSet.has(track.name));
@@ -177,7 +186,7 @@ document.getElementById('reload-btn').addEventListener('click', async function (
                     additionalTracks = await Promise.race([
                         getRecommendedTracks(artistName),
                         new Promise((_resolve, reject) => {
-                            setTimeout(() => reject(new Error('timeout, not found tracks')), 5000);
+                            setTimeout(() => reject(new Error('not found tracks')), 5000);
                         }),
                     ]);
                 } catch (error) {
